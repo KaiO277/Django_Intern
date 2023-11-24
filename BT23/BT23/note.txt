@@ -1,0 +1,37 @@
+//cài đặt thư viện python-doten
+pip install python-dotenv
+
+//tạo file .env 
+Trong Django, file .env thường được sử dụng để lưu trữ các biến môi trường (environment variables) 
+như thông tin cấu hình, khóa bảo mật và các giá trị khác mà ứng dụng của bạn cần để hoạt động.
+Điều này giúp tách biệt thông tin cấu hình từ mã nguồn chính và cung cấp một cách an toàn để 
+lưu trữ các giá trị nhạy cảm mà không cần phải lưu trực tiếp trong mã nguồn.
+
+//
+DEBUG:
+
+Khi DEBUG được đặt thành True, Django sẽ chạy ở chế độ debug, 
+cung cấp thông tin chi tiết về lỗi và các cảnh báo, cũng như hỗ 
+trợ môi trường phát triển. Tuy nhiên, khi triển khai ứng dụng 
+trong môi trường sản xuất, nên đặt DEBUG thành False để giảm 
+rủi ro bảo mật và tối ưu hóa hiệu suất.
+
+//
+SECRET_KEY:
+
+SECRET_KEY là một chuỗi bí mật được sử dụng để ký và mã hóa dữ liệu
+ trong Django. Nếu ai đó biết giá trị của SECRET_KEY, họ có thể giả
+  mạo các chữ ký và giải mã dữ liệu, tiềm ẩn rủi ro lớn cho bảo mật 
+  ứng dụng. Vì vậy, giữ SECRET_KEY bí mật là rất quan trọng.
+
+//  
+ALLOWED_HOSTS:
+
+ALLOWED_HOSTS là danh sách các host/domain mà ứng dụng Django chấp nhận
+ các yêu cầu từ. Khi triển khai ứng dụng, nó quan trọng để chỉ định các
+  host mà Django nên phục vụ. Điều này giúp ngăn chặn tấn công giả mạo 
+  host và bảo vệ ứng dụng khỏi một số loại tấn công.
+
+//tạo database 
+python manage.py makemigrations <name_app>
+python manage.py migrate   

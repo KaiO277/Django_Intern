@@ -1,0 +1,10 @@
+//liên kết với mysql 
+python manage.py migrate 
+
+//tạo tài khoản superadmin 
+python manage.py createsuperuser 
+
+//lệnh để đổi password
+python manage.py changepassword <username>
+username: nghia 
+pass: kaio2772k2@ 

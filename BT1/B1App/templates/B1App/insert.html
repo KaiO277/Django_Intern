@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Title</title>
+</head>
+<body>
+    <center>
+        <form action="{% url 'insertUser' %}" method="post" name="register">
+            {% csrf_token %}
+            <h1>Register User</h1>
+            <pre>
+                Name        : <input type="text" name="username" id="username" width="200" placeholder="Enter your name"> <br>
+                Email       : <input type="email" name="email" id="email" width="200" placeholder="Enter your Email"> <br>
+                Address     : <input type="text" name="address" id="address" width="200" placeholder="Enter your Address"> <br>
+
+                <input type="submit" value="Click  to register" name="reg" width="300" height="100">
+            </pre>
+        </form>
+    </center>
+</body>
+</html>

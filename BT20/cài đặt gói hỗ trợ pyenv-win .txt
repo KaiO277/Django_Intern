@@ -1,0 +1,21 @@
+cài đặt gói hỗ trợ pyenv-win :
+
+Invoke-WebRequest -UseBasicParsing -Uri "https://raw.githubusercontent.com/pyenv-win/pyenv-win/master/pyenv-win/install-pyenv-win.ps1" -OutFile "./install-pyenv-win.ps1"; &"./install-pyenv-win.ps1"
+
+
+Cài đặt các phiên bản Python:
+
+pyenv install 3.7.9
+pyenv install 3.9.7
+
+
+Tạo môi trường ảo Python cho mỗi phiên bản:
+
+môi trường ảo Python 3.7:
+pyenv virtualenv 3.7.9 myenv37
+
+ môi trường ảo Python 3.9:
+pyenv virtualenv 3.9.7 myenv39
+
+
+
