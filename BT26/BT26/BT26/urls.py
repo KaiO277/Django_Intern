@@ -23,7 +23,7 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 urlpatterns = [
     path('', include('student.urls')),
     path('ckeditor/', include('ckeditor_uploader.urls')),
-    path('social-auth/', include('social_django.urls', namespace='social')),
+    path('social-auth/', include('social_django.urls', namespace='social-login')),
     path('admin/', admin.site.urls),
 ] 
 

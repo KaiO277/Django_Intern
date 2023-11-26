@@ -17,6 +17,6 @@ urlpatterns = [
     path('send-email', views.sendEmail, name='sendEmail'),
     path('check-login', views.check_login, name='check_login'),
     path('login', views.login, name='login'),
-    # path('google-login', views.login_google, name='google_login'),
+    path('accounts/profile/', views.login_success_google, name='login_success_google'),
     path('', views.main,name='main'),
 ]

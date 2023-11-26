@@ -2,12 +2,12 @@ from django.shortcuts import render, redirect
 from .models import student
 from django.core.paginator import Paginator
 from django.conf import settings
-from django.core.mail import send_mail
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, get_user_model
+
 
 # Create your views here.
 
@@ -124,21 +124,20 @@ def sendEmail(request):
 def login(request):
     return render(request, 'login.html')
 
-# def check_login(request):
-#     if request.method == 'POST':
-#         username_or_email = request.POST.get('username')
-#         password = request.POST.get('password')
-#         user = authenticate(request, username = username_or_email, password = password)
-#         if user is not None:
-#             return HttpResponse('Login successful')
-#         else:
-#             return HttpResponse('Login failed')
+def login_success_google(request):
+     # Kiểm tra xem người dùng có được xác thực hay không
+    is_authenticated = request.user.is_authenticated
+    
+    # Tạo một chuỗi để hiển thị liệu người dùng có được xác thực hay không
+    check_au = "Người dùng đã xác thực: " + str(request.user.is_authenticated)
 
-#     return render(request, 'login.html')
+    # Nếu người dùng đã xác thực, trả về một thông báo thành công
+    if is_authenticated:
+        return HttpResponse('Đăng nhập thành công, '+ check_au)
+    else:
+        return HttpResponse('Đăng nhập tb, '+check_au)
 
-from django.contrib.auth import authenticate, get_user_model
-from django.http import HttpResponse
-from django.shortcuts import render
+
 
 def check_login(request):
     User = get_user_model()
