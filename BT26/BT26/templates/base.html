@@ -39,12 +39,15 @@
           <a class="nav-link" href="{% url 'send' %}">Send Mail</a>
         </li>
       </ul>
-      {% comment %} <form class="form-inline my-2 my-lg-0">
-        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-      </form> {% endcomment %}
-      <a class="btn btn-outline-success form-inline my-2 my-lg-0 nav-link" href="{% url 'login' %}">Login</a>
-      
+      <ul class="nav navbar-nav">
+        <li class="dropdown"><a class="dropdown-toggle form-inline my-2 my-lg-0 nav-link" data-toggle="dropdown" href="#">Welcome, {{ user.username }}!<span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a class="nav-link" href="">  Account</a></li>
+            <li><a class="nav-link" href="{% url 'changepass' %}">  Change Password</a></li>
+            <li><a class="nav-link" href="{% url 'logout' %}">  Logout</a></li>
+          </ul>
+        </li>
+      </ul>
     </div>
   </nav>
   {% block content %}{% endblock content %}
