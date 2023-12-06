@@ -23,6 +23,8 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from social_django.models import UserSocialAuth
 from django.contrib.auth.models import Group
 
+from .forms import TestForm
+
 
 # Create your views here.
 
@@ -130,7 +132,8 @@ def mainHome(request):
 
 @login_required(login_url='check_login')
 def testForm(request):
-    return render(request, 'testForm.html')
+    form = TestForm()
+    return render(request, 'testForm.html', {'form': form})
 
 def send_custom_email(email, content):
     subject = 'Thông Báo'
@@ -353,6 +356,20 @@ def CheckPassReset(request,uidb64):
             update_session_auth_hash(request, user)
             auth.logout(request)
             return render(request,'thongbao.html',{'title':'Thông Báo','content':'Đổi mật khẩu thành công. Xin hãy đăng nhập lại!'})
+
+def check_test_form(request):
+    if request.method == 'POST':
+        form = TestForm(request.POST)
+        if form.is_valid():
+                # Xử lý dữ liệu form
+                email = form.cleaned_data['email']
+                password = form.cleaned_data['password']
+                print("email: "+email)
+                print("password: "+password)
+        else:
+            form = TestForm()
+
+    return render(request, 'testForm.html', {'form': form})
 
 def register(request):
     return render(request,'register.html')

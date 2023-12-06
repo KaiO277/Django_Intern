@@ -24,6 +24,7 @@ urlpatterns = [
     path('changepassword/', views.change_pass, name='changepass'), 
     path('register/', views.register, name='register'), 
     path('test-form/', views.testForm, name='testForm'), 
+    path('check-test-form/', views.check_test_form, name='check_test_form'),
     path('register-with-google/', views.register_with_google, name='register_with_google'), 
     path('check-change-password/', views.check_change_password, name='check_change_password'),
     path('check-reset/<uidb64>/', views.CheckPassReset, name='check_password_reset_confirm'),
