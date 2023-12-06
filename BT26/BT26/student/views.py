@@ -16,10 +16,12 @@ from django.contrib.auth.tokens import default_token_generator
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 #
-from django.contrib.auth.views import PasswordResetConfirmView
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+
+from social_django.models import UserSocialAuth
+from django.contrib.auth.models import Group
 
 
 # Create your views here.
@@ -34,7 +36,6 @@ def index(request):
     use_bootstrap = True  
     template_name = 'index.html' if use_bootstrap else 'tailwind_layout.html'
     return render(request, template_name,{'students':students, 'my_data':my_data})
-
 
 @login_required(login_url='check_login')
 def testMedia(request):
@@ -98,7 +99,6 @@ def update(request, pk):
 
     return redirect('index')    
 
-
 @login_required(login_url='check_login')
 def edit(request, pk):
     st = student.objects.get(id=pk)
@@ -112,6 +112,25 @@ def main(request):
 def send(request):
     return render(request, 'sendEmail.html')
 
+@login_required(login_url='check_login')
+def mainHome(request):
+    user = request.user 
+    if user.groups.filter(name='superadmin').exists():
+        return render(request, 'main.html',{'content':'superadmin'})
+    elif user.groups.filter(name='admin').exists():
+        return render(request, 'main.html',{'content':'admin'})
+    elif user.groups.filter(name='user').exists():
+        return render(request, 'main.html',{'content':'user'})
+    else:
+        # Nếu người dùng không thuộc bất kỳ nhóm nào, thêm họ vào nhóm 'user'
+        user_group, created = Group.objects.get_or_create(name='user')
+        user.groups.add(user_group)
+        return render(request, 'main.html', {'content': 'user'})
+    # return render(request, 'main.html')
+
+@login_required(login_url='check_login')
+def testForm(request):
+    return render(request, 'testForm.html')
 
 def send_custom_email(email, content):
     subject = 'Thông Báo'
@@ -199,61 +218,9 @@ def check_change_password(request):
             auth.logout(request)
             return render(request,'thongbao.html',{'title':'Thông Báo','content':'Đổi mật khẩu thành công. Xin hãy đăng nhập lại!'})
 
-# def check_login(request):
-#     User = get_user_model()
-
-#     if request.method == 'POST':
-#         username_or_email = request.POST.get('username')
-#         password = request.POST.get('password')
-
-#         # Thực hiện xác thực với tên người dùng
-#         user = authenticate(request, username=username_or_email, password=password)
-
-#         # check_email = User.objects.get
-
-#         if user is not None:
-#             # Xác thực thành công
-#             auth.login(request,user)
-#             return redirect('index')
-#         else:
-#             try:
-#                 # Thử lấy người dùng bằng email
-#                 user = User.objects.get(email=username_or_email)
-#             except User.DoesNotExist:
-#                 # Xử lý trường hợp người dùng không tồn tại
-#                 if not is_valid_email(username_or_email):
-#                     return HttpResponse('Username hoặc email sai') 
-#                 else:
-#                     return HttpResponse('Không đúng định dạng email') 
-
-#             # Validate email (bạn có thể muốn sử dụng một phương pháp kiểm tra email phức tạp hơn)
-            
-
-#             # Thực hiện xác thực với người dùng đã lấy được
-#             user = authenticate(request, username=user.username, password=password)
-
-#             if user is not None:
-#                 # Xác thực thành công
-#                 auth.login(request,user)
-#                 return redirect('index')
-#             else:
-#                 # Xác thực thất bại
-#                 return HttpResponse('Sai mật khẩu')
-
-#     # return render(request, 'login.html')
-#     is_authenticated = request.user.is_authenticated
-    
-#     # Tạo một chuỗi để hiển thị liệu người dùng có được xác thực hay không
-#     check_au = "Người dùng đã xác thực: " + str(request.user.is_authenticated)
-
-#     # Nếu người dùng đã xác thực, trả về một thông báo thành công
-#     if is_authenticated:
-#         return redirect('index')
-#     else:
-#         return redirect('login')
-
 def check_login(request):
     User = get_user_model()
+    
 
     if request.method == 'POST':
         username_or_email = request.POST.get('username')
@@ -270,7 +237,16 @@ def check_login(request):
             user = authenticate(request, username=user.username, password=password)
             if user is not None:
                 auth.login(request, user)
-                return redirect('index')
+                if user.groups.filter(name='superadmin').exists():
+                    return render(request, 'main.html',{'content':'superadmin'})
+                elif user.groups.filter(name='admin').exists():
+                    return render(request, 'main.html',{'content':'admin'})
+                elif user.groups.filter(name='user').exists():
+                    return render(request, 'main.html',{'content':'user'})
+                else:
+                    return render(request, 'main.html',{'content':'Người dùng không thuộc nhóm nào'})
+                
+                # return redirect('index')
             else:
                 return HttpResponse('Sai mật khẩu')
         else:
@@ -279,7 +255,16 @@ def check_login(request):
             if authentication_form.is_valid():
                 user = authentication_form.get_user()
                 auth.login(request, user)
-                return redirect('index')
+                if user.groups.filter(name='superadmin').exists():
+                    return render(request, 'main.html',{'content':'super admin'})
+                elif user.groups.filter(name='admin').exists():
+                    return render(request, 'main.html',{'content':'admin'})
+                elif user.groups.filter(name='user').exists():
+                    return render(request, 'main.html',{'content':'user'})
+                else:
+                    
+                    return render(request, 'main.html',{'content':'Người dùng không thuộc nhóm nào'})
+                # return redirect('index')
             else:
                 return HttpResponse('Sai tên người dùng hoặc mật khẩu')
 
@@ -288,6 +273,7 @@ def check_login(request):
 
     # Nếu người dùng đã xác thực, trả về một thông báo thành công
     if is_authenticated:
+        
         return redirect('index')
     else:
         return redirect('login')
@@ -368,4 +354,38 @@ def CheckPassReset(request,uidb64):
             auth.logout(request)
             return render(request,'thongbao.html',{'title':'Thông Báo','content':'Đổi mật khẩu thành công. Xin hãy đăng nhập lại!'})
 
+def register(request):
+    return render(request,'register.html')
 
+def register_with_google(request):
+    User = get_user_model()
+
+    if request.user.is_authenticated:
+        try:
+            google_login = UserSocialAuth.objects.get(user=request.user, provider='google')
+        except UserSocialAuth.DoesNotExist:
+            google_login = None
+
+        if google_login:
+            # Người dùng đã đăng nhập bằng Google, kiểm tra xem có tài khoản trong hệ thống không
+            try:
+                user = User.objects.get(email=google_login.extra_data['email'])
+            except User.DoesNotExist:
+                # Tạo tài khoản mới với thông tin từ Google
+                user = User.objects.create(
+                    username=google_login.extra_data['email'],
+                    email=google_login.extra_data['email'],
+                    # Thêm các thông tin khác từ Google nếu cần
+                )
+
+            # Đăng nhập người dùng vào hệ thống
+            auth_login(request, user)
+
+            # Người dùng đã đăng nhập, chuyển hướng hoặc thực hiện các hành động khác
+            return redirect('index')
+        else:
+            # Người dùng đã đăng nhập nhưng không có thông tin xác thực , thực hiện hành động khác hoặc thông báo lỗi
+            return render(request, 'error_template.html', {'error_message': 'Không có thông tin xác thực xã hội.'})
+    else:
+        # Người dùng chưa đăng nhập, chuyển hướng đến trang đăng nhập Google
+        return redirect('social:begin', 'google-oauth2')
