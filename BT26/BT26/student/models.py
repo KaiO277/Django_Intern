@@ -16,3 +16,10 @@ class student(models.Model):
     def __str__(self):
         return self.name
 
+class studentProfile(models.Model):
+    email = models.EmailField(max_length=100)
+    phone = models.CharField(max_length=11)
+    student_profile = models.ForeignKey(student, on_delete=models.CASCADE, related_name='student_profiles')
+
+    def __str__(self):
+        return f"Profile of {self.student.name}"
