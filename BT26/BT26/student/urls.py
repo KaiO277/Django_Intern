@@ -15,6 +15,7 @@ urlpatterns = [
     path('edit/<str:pk>', views.edit, name='edit'),
     path('send', views.send, name='send'),
     path('send-email', views.sendEmail, name='sendEmail'),
+    path('send-email2', views.sendEmail2, name='sendEmail2'),
     path('check-login', views.check_login, name='check_login'),
     path('login', views.login, name='login'),
     path('thongbao', views.thongbao, name='thongbao'),
@@ -31,5 +32,6 @@ urlpatterns = [
     path('form_reset_email', views.form_email_reset, name = 'form-reset-email'),
     path('reset/<uidb64>/<token>/', views.CustomPasswordResetConfirmView, name='password_reset_confirm'),
     path('password_reset/', views.CustomPasswordReset, name='CustomPasswordReset'),
+    path('test-send-email/', views.testSendMail2, name = 'testSendMail2'),
     path('logout/', views.logout, name='logout'), 
 ]

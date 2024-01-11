@@ -25,6 +25,8 @@ from django.contrib.auth.models import Group
 
 from .forms import TestForm
 
+from utils.utils import send_email
+
 
 # Create your views here.
 
@@ -129,6 +131,27 @@ def mainHome(request):
         user.groups.add(user_group)
         return render(request, 'main.html', {'content': 'user'})
     # return render(request, 'main.html')
+
+#sử dụng utils.py
+@login_required(login_url='check_login')
+def testSendMail2(request):
+    return render(request, 'formEmail2.html')
+
+#sử dụng utils.py
+@login_required(login_url='check_login')
+def sendEmail2(request):
+    # Logic để tạo bài viết
+    # if request.method == "POST":
+    #     if
+    # Sau khi tạo bài viết, gửi email thông báo
+    subject = "Bài viết mới đã được tạo"
+    message = request.POST.get('content')
+    recipient_list = request.POST.get('email')
+
+    send_email(subject, message, recipient_list)
+
+    return render(request, 'formEmail2.html')
+
 
 @login_required(login_url='check_login')
 def testForm(request):
